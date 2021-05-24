@@ -42,8 +42,9 @@ public class HomeController {
 
 		List<ProductDTO> products = productService.getTopNewProduct();
 		model.addAttribute("products", products);
-		LOGGER.info("products = {}, listHotProducts = {}", products.size(), listHotProducts.size());
+		LOGGER.info("products = {}, listHotProducts = {}, listNewestProducts = {}, listTopNewProduct = {}", products.size(), listHotProducts.size(),listNewestProducts.size(),products.size());
 		return "index";
 	}
+
 
 }

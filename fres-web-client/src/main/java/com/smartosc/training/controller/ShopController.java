@@ -4,6 +4,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import groovy.util.logging.Log;
+import groovy.util.logging.Log4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -23,8 +27,10 @@ import com.smartosc.training.service.ProductService;
 import com.smartosc.training.utils.CartSupportUtils;
 
 @Controller
+@Log4j
 public class ShopController {
-	
+
+    private static final Logger logger = LoggerFactory.getLogger(ShopController.class);
 	@Autowired
     private ProductService productService;
 
@@ -32,7 +38,7 @@ public class ShopController {
     private CategoryService categoryService;
 
     @GetMapping("/shop")
-    public String page(@RequestParam(name = "categoryId", required = true, defaultValue = "0") Integer categoryId,
+    public String page(@RequestParam(name = "categoryId", defaultValue = "0") Integer categoryId,
                        @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
                        @RequestParam(name = "size", required = false, defaultValue = "16") Integer size,
                        ModelMap modelMap, HttpServletRequest request) {
@@ -74,6 +80,7 @@ public class ShopController {
 
         CartInfo cartInfo = CartSupportUtils.getCartInSession(request);
         modelMap.addAttribute("sizeCart", cartInfo.getCartLines().size());
+        logger.info("Get Shopping page");
         return "shop";
     }
 
@@ -84,6 +91,7 @@ public class ShopController {
 
         model.addAttribute("listCategory", listCategory);
         model.addAttribute("listProduct", listProduct);
+        logger.info("Get category:{}",categoryName);
         return "shop";
     }
 
@@ -106,6 +114,7 @@ public class ShopController {
         CategoryDTO category = categoryService.getCategoryById(id);
 
         model.addAttribute("category", category);
+        logger.info("Get category:{}",category.getCategoryName());
         return "shop";
     }
 	
