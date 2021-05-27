@@ -68,15 +68,29 @@
             <form class="bg-white p-5 contact-form" method="post" th:action="@{/profile}" th:object="${user}">
                 <input th:field="${user.userId}" type="hidden">
                 <div class="form-group">
+                    <span class="label-input100">Full Name</span>
                     <input class="form-control" th:field="${user.fullName}" name="fullName" type="text"
                              required placeholder="Your Name">
                 </div>
                 <div class="form-group">
+                    <span class="label-input100">Email</span>
                     <input class="form-control" th:field="${user.email}" name="email" type="email" disabled>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" th:field="${user.userName}" name="userName" type="text"
+                    <input type="hidden" class="form-control" th:field="${user.userName}" name="userName"
                            disabled>
+                </div>
+                <div class="form-group">
+                    <span class="label-input100">Phone</span>
+                    <input class="form-control" th:field="${addressDTO.phone}" name="phone" type="text" disabled>
+                </div>
+                <div class="form-group">
+                    <span class="label-input100">Address</span>
+                    <input class="form-control" th:field="${addressDTO.address}" name="address" type="text"disabled>
+                </div>
+                <div class="form-group">
+                    <span class="label-input100">Note</span>
+                    <input class="form-control" th:field="${addressDTO.note}" name="note" type="text"disabled>
                 </div>
                 <input type="hidden" th:field="${user.password}" >
                 <div class="form-group">

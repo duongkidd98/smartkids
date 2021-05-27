@@ -116,6 +116,16 @@ public class ProductService {
                 }).getData();
     }
 
+    public List<ProductDTO> getRelatedProducts(int id) {
+        return restTemplateService.execute(
+                new StringBuilder(url).append(preUrl).append("s/related/").append(id).toString(),
+                HttpMethod.GET,
+                null,
+                null,
+                new ParameterizedTypeReference<APIResponse<List<ProductDTO>>>() {
+                }).getData();
+    }
+
     public List<ProductDTO> getTop8NewestPromotedProducts() {
         return restTemplateService.execute(
                 new StringBuilder(url).append(preUrl).append("s/newest-promoted").toString(),

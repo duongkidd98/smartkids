@@ -224,6 +224,26 @@ public class ProductService {
     }
 
     /**
+     * get top 8 related products
+     *
+     * @return
+     */
+    public List<ProductDTO> getRelatedProducts(Integer id) {
+        List<Product> products;
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isPresent()) {
+            products = productRepository.findRelatedProducts(product.get().getName());
+
+            if (products.size()==0){
+                products = productRepository.findHotProducts();
+            }
+        } else {
+            products = productRepository.findHotProducts();
+        }
+        return products.stream().map(ConvertUtils::convertProductToProductDTO).collect(Collectors.toList());
+    }
+
+    /**
      * get newest promoted products top 8
      *
      * @return

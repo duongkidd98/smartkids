@@ -3,6 +3,9 @@ package com.smartosc.training.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.smartosc.training.dto.AddressDTO;
+import com.smartosc.training.dto.OrdersDTO;
+import com.smartosc.training.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -29,6 +32,8 @@ public class UserController {
 	
 	@Autowired
     private RestService restService;
+    @Autowired
+    private AddressService addressService;
 
     @Autowired
     private JWTUtils jwtTokenUtil;
@@ -39,10 +44,13 @@ public class UserController {
     @Value("${api.url}")
     private String url;
 
+    @Value("${prefix.address}")
+    private String preUrl;
     @GetMapping("profile")
     public String profile(Model model) {
         AppUserDetails userLogin = (AppUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDTO user = null;
+        AddressDTO addressDTO =null;
         Map values = new HashMap<String, Object>();
         values.put("username", userLogin.getUsername());
         APIResponse<UserDTO> responseData = restService.execute(
@@ -56,12 +64,27 @@ public class UserController {
         if(responseData.getStatus()==200) {
             user = responseData.getData();
         }
+
+            APIResponse<AddressDTO> addressDTOAPIResponse = restService.execute(
+                    new StringBuilder(url).append("/address/user/").append(user.getUserId()).toString(),
+                    HttpMethod.GET,
+                    null,
+                    null,
+                    new ParameterizedTypeReference<APIResponse<AddressDTO>>() {
+                    },
+                    values);
+
+            if (addressDTOAPIResponse.getStatus() == 200) {
+                addressDTO = addressDTOAPIResponse.getData();
+            }
+
         model.addAttribute("user", user);
+        model.addAttribute("addressDTO", addressDTO);
         return "profile";
     }
 
     @PostMapping("profile")
-    public String alo(@ModelAttribute("user") UserDTO userDTO){
+    public String profileUpdate(@ModelAttribute("user") UserDTO userDTO,@ModelAttribute("addressDTO") AddressDTO addressDTO){
         String authToken = jwtTokenUtil.getJwtTokenFromSecurityContext();
         HttpHeaders header = new HttpHeaders();
         header.setBearerAuth(authToken);
@@ -72,6 +95,7 @@ public class UserController {
                 header,
                 userDTO,
                 new ParameterizedTypeReference<APIResponse<UserDTO>>() {});
+
         return "redirect:/profile";
     }
 	

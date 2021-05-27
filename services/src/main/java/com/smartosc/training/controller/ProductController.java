@@ -231,6 +231,15 @@ public class ProductController {
         responseData.setMessage("Get hot product successfully!");
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
+    @GetMapping("products/related/{id}")
+    public ResponseEntity<APIResponse<List<ProductDTO>>> getRelatedProducts(@PathVariable("id") Integer id){
+        List<ProductDTO> productDTOS = productService.getRelatedProducts(id);
+        APIResponse<List<ProductDTO>> responseData = new APIResponse<>();
+        responseData.setStatus(HttpStatus.OK.value());
+        responseData.setData(productDTOS);
+        responseData.setMessage("Get related product successfully!");
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
 
     /**
      * Get newest promoted products

@@ -41,7 +41,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "                                inner join orders on orderdetail.orders_id = orders.order_id\n" +
             "                                WHERE orders.status = 2 GROUP BY product.name ORDER BY COUNT(product.name) DESC LIMIT 8", nativeQuery = true)
     List<Product> findHotProducts();
-
+    @Query("from Product p where p.name like %:searchValue% or p.name like %:searchValue%")
+    List<Product> findRelatedProducts(@Param("searchValue")String searchValue);
 
     @Query(value = "SELECT p1 FROM Product p1 INNER JOIN ProductPromotion p3 ON p1.productId = p3.product.productId " +
             "INNER JOIN Promotion p2 ON p2.promotionId = p3.promotion.promotionId WHERE p2.status = 1" +

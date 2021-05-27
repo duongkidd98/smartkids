@@ -101,7 +101,7 @@ public class ShopController {
         ProductDTO product = productService.getProductById(id);
         model.addAttribute("product", product);
 
-        List<ProductDTO> listHotProducts = productService.getHotProducts();
+        List<ProductDTO> listHotProducts = productService.getRelatedProducts(product.getProductId());
         model.addAttribute("listHotProducts", listHotProducts);
 
         CartInfo cartInfo = CartSupportUtils.getCartInSession(request);
